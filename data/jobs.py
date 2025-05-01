@@ -1,26 +1,27 @@
 from datetime import datetime, time
 from sqlalchemy import Column, String, Integer, DateTime, Text, Boolean, orm, Table, ForeignKey
 from .db_session import SqlAlchemyBase
-from data.users import association_table
+from data.users import job_participants
 
 
 class Jobs(SqlAlchemyBase):
     __tablename__ = 'jobs'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    team_leader_id = Column(Integer, ForeignKey("users.id"), nullable=True)
-    job = Column(Text, nullable=True)
-    work_size = Column(Integer, nullable=True)
-    collaborators = Column(String, nullable=True)
-    start_date = Column(DateTime, nullable=True)
-    end_date = Column(DateTime, default=datetime.now, nullable=True)
-    is_finished = Column(Boolean, nullable=True)
+    team_leader_id = Column(Integer, ForeignKey('users.id'))
+    job = Column(Text)
+    work_size = Column(Integer)
+    collaborators = Column(String)
+    start_date = Column(DateTime)
+    end_date = Column(DateTime, default=datetime.now)
+    is_finished = Column(Boolean, default=False)
 
-    team_leader = orm.relationship("User", back_populates="led_jobs")
+    # Связи:
+    team_leader = orm.relationship("User", back_populates="jobs_led")
     participants = orm.relationship(
         "User",
-        secondary=association_table,
-        back_populates="participated_jobs"
+        secondary=job_participants,
+        back_populates="jobs_participated"
     )
 
     def __repr__(self):

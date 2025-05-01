@@ -3,11 +3,11 @@ from sqlalchemy import Column, String, Integer, DateTime, orm, ForeignKey, Table
 from werkzeug.security import generate_password_hash, check_password_hash
 from .db_session import SqlAlchemyBase
 
-association_table = Table(
-    'association',
+job_participants = Table(
+    'job_participants',
     SqlAlchemyBase.metadata,
-    Column('user_id', Integer, ForeignKey('users.id')),
-    Column('job_id', Integer, ForeignKey('jobs.id'))
+    Column('user_id', Integer, ForeignKey('users.id'), primary_key=True),
+    Column('job_id', Integer, ForeignKey('jobs.id'), primary_key=True)
 )
 
 
@@ -25,11 +25,10 @@ class User(SqlAlchemyBase):
     hashed_password = Column(String)
     modified_date = Column(DateTime)
 
-    # Relationships
-    led_jobs = orm.relationship("Jobs", back_populates="team_leader")
-    participated_jobs = orm.relationship(
+    jobs_led = orm.relationship("Jobs", back_populates="team_leader")
+    jobs_participated = orm.relationship(
         "Jobs",
-        secondary=association_table,
+        secondary=job_participants,
         back_populates="participants"
     )
 

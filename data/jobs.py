@@ -9,7 +9,7 @@ class Jobs(SqlAlchemyBase):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     team_leader_id = Column(Integer, ForeignKey('users.id'))
-    job = Column(Text)
+    job = Column(Text, unique=True)
     work_size = Column(Integer)
     collaborators = Column(String)
     start_date = Column(DateTime)

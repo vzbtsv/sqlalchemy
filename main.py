@@ -1,24 +1,70 @@
-from datetime import datetime
-
-from flask import Flask, render_template, redirect
 from data import db_session
 from data.users import User
-from data.jobs import Jobs
-from forms.user import RegisterForm
+from flask_login import LoginManager
+from flask import Flask, render_template, session
+import datetime
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
-db_session.global_init("db/mars_explorer.db")
+# app = Flask(__name__)
+#
+# login_manager = LoginManager()
+# login_manager.init_app(app)
+#
+# app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+#
+# db_session.global_init("db/mars_explorer.db")
+#
+# def main():
+#     app.run()
+#
+# if __name__ == '__main__':
+#     main()
+
 
 session = db_session.create_session()
 
-job = Jobs()
-job.job = "deployment of residential modules 1 and 2"
-job.team_leader_id = 1
-job.work_size = 15
-job.collaborators = "2, 3"
-job.start_date = datetime.now()
-job.is_finished = False
+user = User()
+user.surname = "Scott"
+user.name = "Ridley"
+user.age = "21"
+user.position = "capitan"
+user.speciality = "research engineer"
+user.adreess = "module_1"
+user.email = "scott_chief@mars.org"
 
-session.add(job)
+
+
+user1 = User()
+user1.surname = "Anaxagoros"
+user1.name = "Oculus"
+user1.position = "Aeon Scholar"
+user1.speciality = "Pathstrider Phenomenology"
+user1.address = "Simulated Universe, Sector 1"
+user1.email = "anaxagoros@hcs.com"
+
+
+
+
+user2 = User()
+user2.surname = "Herta"
+user2.position = "Master of the Herta Space Station"
+user2.speciality = "Simulated Universe Development"
+user2.address = "Herta Space Station, Core Sector"
+user2.email = "herta@hcs.com"
+
+
+
+
+user3 = User()
+user3.surname = "Screwllum"
+user3.age = 127
+user3.position = "Mechanical Philosopher"
+user3.speciality = "Quantum Robotics"
+user3.address = "Planet Screwllum, Clockwork Mansion"
+user3.email = "screwllum@clockwork.com"
+
+
+session.add(user)
+session.add(user1)
+session.add(user2)
+session.add(user3)
 session.commit()

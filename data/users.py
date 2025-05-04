@@ -1,14 +1,6 @@
-from datetime import datetime
-from sqlalchemy import Column, String, Integer, DateTime, orm, ForeignKey, Table
+from sqlalchemy import Column, String, Integer, DateTime, orm
 from werkzeug.security import generate_password_hash, check_password_hash
-from .db_session import SqlAlchemyBase
-
-job_participants = Table(
-    'job_participants',
-    SqlAlchemyBase.metadata,
-    Column('user_id', Integer, ForeignKey('users.id'), primary_key=True),
-    Column('job_id', Integer, ForeignKey('jobs.id'), primary_key=True)
-)
+from data.db_session import SqlAlchemyBase
 
 
 class User(SqlAlchemyBase):
@@ -25,12 +17,9 @@ class User(SqlAlchemyBase):
     hashed_password = Column(String)
     modified_date = Column(DateTime)
 
-    jobs_led = orm.relationship("Jobs", back_populates="team_leader")
-    jobs_participated = orm.relationship(
-        "Jobs",
-        secondary=job_participants,
-        back_populates="participants"
-    )
+
+    led_jobs = orm.relationship("Jobs", back_populates="team_leader")
+
 
     def __repr__(self):
         return (f"{self.surname} {self.name} {self.age} "
